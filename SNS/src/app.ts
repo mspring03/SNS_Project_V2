@@ -8,8 +8,14 @@ import { NotFoundError, ApiError, InternalError } from './core/ApiError';
 import { createConnection } from 'typeorm';
 import connectionOptions from './database';
 import morgan from 'morgan';
+import { port } from './config';
+import router from './routes';
 
 const app = express();
+
+app.listen(80, () => {
+  Logger.info(`server running on port : ${port}`);
+});
 
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(
@@ -28,8 +34,7 @@ createConnection(connectionOptions)
   })
   .catch((error) => Logger.error(error));
 
-// // Routes
-app.use('/V2');
+app.use('/v2', router);
 
 app.use((req, res, next) => next(new NotFoundError()));
 
