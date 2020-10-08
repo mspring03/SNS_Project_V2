@@ -9,7 +9,7 @@ import {
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  _id: number;
 
   @Column()
   email: string;
@@ -20,10 +20,10 @@ export class User {
   @Column()
   nickname: string;
 
-  @Column()
+  @Column({ nullable: true })
   tokenKey: string;
 
-  @Column()
+  @Column({ nullable: true })
   refreshtokenKey: string;
 
   @CreateDateColumn()
