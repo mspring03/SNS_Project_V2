@@ -4,6 +4,8 @@ import { PublicRequest } from 'app-request';
 import schema from '../schema/auth';
 import validator, { ValidationSource } from '../middleware/validator';
 import asyncHandler from '../middleware/asyncHandler';
+import { apiKey } from '../config';
+import Logger from '../core/Logger';
 
 const router = express.Router();
 
@@ -12,10 +14,9 @@ export default router.use(
   asyncHandler(async (req: PublicRequest, res, next) => {
     req.apiKey = req.headers['x-api-key'].toString();
 
-    // const apiKey = await ApiKeyRepo.findByKey(req.apiKey);
-    // console.log(req.apikey);
+    if (req.apiKey !== apiKey) throw new ForbiddenError();
+    Logger.info(apiKey);
 
-    if (!req.apiKey) throw new ForbiddenError();
     return next();
   }),
 );
