@@ -5,7 +5,7 @@ const connectionOptions: ConnectionOptions = {
   type: 'mysql',
   synchronize: true,
   logging: true,
-  entities: ['model/*.ts'],
+  entities: ['./database/model/**/*.ts'],
   database: db.name,
   host: db.host,
   port: db.port,
