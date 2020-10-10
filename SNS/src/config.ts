@@ -2,6 +2,7 @@ import path from 'path';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: path.join(__dirname, '../.env') });
 
+export const hostAddress = process.env.HOST_ADDRESS;
 export const environment = process.env.NODE_ENV;
 export const port = process.env.PORT;
 
@@ -34,3 +35,5 @@ export const apiKey = process.env.APIKEY;
 // };
 
 export const logDirectory = process.env.LOG_DIR;
+
+export const valueEncryptionKey = process.env.VALUE_ENCRYPTION_KEY;
