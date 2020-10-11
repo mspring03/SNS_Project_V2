@@ -11,16 +11,16 @@ import { getCustomRepository } from 'typeorm';
 import sender from '../../middleware/emailSender';
 import { hostAddress } from '../../config';
 import { BadRequestError, NotFoundError } from '../../core/ApiError';
-import LoginKeyRepository from '../../database/repository/loginKeyRepo';
+import LoginKeyRepo from '../../database/repository/loginKeyRepo';
 
 const router = express.Router();
 
 router.post(
-  '/signup',
+  '/basic',
   validator(schema.signup),
   asyncHandler(async (req: Request, res: Response) => {
     const userRepo = getCustomRepository(UserRepo);
-    const loginKeyRepository = getCustomRepository(LoginKeyRepository);
+    const loginKeyRepo = getCustomRepository(LoginKeyRepo);
     const user = await userRepo.findByEmail(req.body.email);
 
     if (user) throw new BadRequestError('User already registered');
@@ -28,7 +28,7 @@ router.post(
     const passwordHash = await bcrypt.hash(req.body.password, 10);
     const loginAccessKey = crypto.randomBytes(17).toString('hex');
 
-    const url = `<div style="width: 1100px; height: 50px; background-color: #99ccff;"><a style="text-align: center" href="${hostAddress}/v2/access/signup/?email=${req.body.email}&password=${passwordHash}&nickname=${req.body.nickname}">${hostAddress}/v2/access/signup/?email=${req.body.email}&password=${passwordHash}&nickname=${req.body.nickname}&key=${loginAccessKey}</a></div>`;
+    const url = `<div style="width: 1100px; height: 50px; background-color: #99ccff;"><a style="text-align: center" href="${hostAddress}/v2/signupCallback/basic?email=${req.body.email}&password=${passwordHash}&nickname=${req.body.nickname}">${hostAddress}/v2/signupCallback/basic?email=${req.body.email}&password=${passwordHash}&nickname=${req.body.nickname}&key=${loginAccessKey}</a></div>`;
     const mailOptions = {
       from: 'aespringaa@gmail.com',
       to: req.body.email,
@@ -39,7 +39,7 @@ router.post(
     const errorMessage: string = await sender(mailOptions);
     if (errorMessage) throw new NotFoundError(errorMessage);
 
-    await loginKeyRepository.createKey(loginAccessKey);
+    await loginKeyRepo.createKey(loginAccessKey);
 
     new SuccessResponse('send Successful', {
       message: 'Send mail',
