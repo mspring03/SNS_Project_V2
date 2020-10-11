@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class loginKey {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   _id: number;
 
   @Column()
