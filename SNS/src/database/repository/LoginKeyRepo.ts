@@ -6,7 +6,7 @@ export default class LoginKeyRepository extends Repository<loginKey> {
   public async createKey(key: string) {
     const loginkey = new loginKey();
     loginkey.key = key;
-    await this.manager.save(loginKey);
+    await this.manager.save(loginkey);
   }
 
   public async findKey(key: string): Promise<loginKey> {
